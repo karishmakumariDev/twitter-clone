@@ -1,12 +1,31 @@
-import express from "express"
-import authRautes from "./routes/auth.routes.js"
+import express from "express";
+import dotenv from "dotenv";
+import connectMongoDB from "./db/connectMongoDB.js"; 
+import authRoutes from "./routes/auth.routes.js"; // Fix typo in variable name
+
+dotenv.config(); 
+
 const app = express();
+const PORT = process.env.PORT || 5000; 
 
-//password = Krp0otqZ0B5sgFal
-// mongodb+srv://<db_username>:<db_password>@cluster0.irmdb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+app.use("/api/auth", authRoutes);
 
-app.use("/api/auth",authRautes);
 
-app.listen(8000, () => {
-    console.log("server is runging on post 8000");
-})
+async function startServer() {
+    try {
+        await connectMongoDB();
+        startNodeServer();
+    } catch(err) {
+        console.log("error while starting server", err.message);
+    }
+}
+
+function startNodeServer() {
+    app.listen(8000, () => {
+        console.log(`Server is running on port ${PORT}`);
+        
+    });
+}
+
+
+startServer();
