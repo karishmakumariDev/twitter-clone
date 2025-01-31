@@ -12,13 +12,14 @@ export const signup = async (req,res) => {
      }
 
      const existingUser = await User.findOne({username});
-     
+
     }catch(error){
 
     }
 }
-
 export const login = async (req,res) => {
+console.log("login called");
+
     res.json({
         data:"you hit the login endpoint"
     })
