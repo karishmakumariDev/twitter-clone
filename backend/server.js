@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import connectMongoDB from "./db/connectMongoDB.js"; 
 import authRoutes from "./routes/auth.routes.js"; // Fix typo in variable name
 import cookieParser from "cookie-parser";
-import userRoutes from "./routes/user.routes.js"
+import userRoutes from "./routes/user.routes.js";
+import postRoutes from "./routes/post.routes.js";
 import cloudinary from "cloudinary";
 
 dotenv.config(); 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users",userRoutes);
+app.use("/api/posts",postRoutes);
 
 async function startServer() {
     try {
