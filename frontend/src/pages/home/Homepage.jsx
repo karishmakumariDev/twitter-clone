@@ -34,11 +34,11 @@ const HomePage = () => {
 					</div>
 				</div>
 
-				{/*  CREATE POST INPUT */}
+				 CREATE POST INPUT
 				<CreatePost />
 
 				{/* POSTS */}
-				<Posts />
+				{/* <Posts /> */}
 			</div>
 		</>
 	);
