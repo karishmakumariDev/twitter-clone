@@ -6,6 +6,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/singup/SignUpPage";
 import Sidebar from "./components/common/Sidebar";
 import RightPanel from "./components/common/RightPanel";
+import NotificationPage from "./pages/notification/NotificationPage";
 
 
 
@@ -19,6 +20,7 @@ function App() {
           <Route path='/' element={<HomePage/>} />
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/signup' element={<SignUpPage/>} />
+          <Route path ='/notificationS' element={<NotificationPage/>} />
          </Routes>
          <RightPanel/>
       </div>
