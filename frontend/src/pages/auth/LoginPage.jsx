@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { MdOutlineMail } from "react-icons/md";
 import { MdPassword } from "react-icons/md";
 import XSvg from "../../components/svg/X";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
 	const [formData, setFormData] = useState({
@@ -10,16 +12,46 @@ const LoginPage = () => {
 		password: "",
 	});
 
+  const queryClient = useQueryClient();
+	const {
+		mutate: loginMutation,
+		isPending,
+		isError,
+		error,
+	} = useMutation({
+		mutationFn: async ({ username, password }) => {
+			try {
+				const res = await fetch("/api/auth/login", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ username, password }),
+				});
+				const data = await res.json();
+				if (!res.ok) {
+					throw new Error(data.error || "Something went wrong");
+				}
+				return data; 
+			} catch (error) {
+				throw new Error(error);
+			}
+		},
+		onSuccess: () => {
+      toast.success("Login successfully");
+			queryClient.invalidateQueries({ queryKey: ["authUser"] });
+		},
+	});
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		console.log(formData);
+		loginMutation(formData); 
 	};
 
 	const handleInputChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
-
-	const isError = false;
 
 	return (
 		<div className='flex mx-auto max-w-screen-xl h-screen'>
@@ -53,8 +85,10 @@ const LoginPage = () => {
 							value={formData.password}
 						/>
 					</label>
-					<button className='rounded-full text-white btn btn-primary'>Login</button>
-					{isError && <p className='text-red-500'>Something went wrong</p>}
+					<button type="submit" className='rounded-full text-white btn btn-primary'>
+						{isPending ? "Loading..." : "Login"}
+					</button>
+					{isError && <p className='text-red-500'>{error?.message}</p>}
 				</form>
 				<div className='flex flex-col gap-2 mt-4'>
 					<p className='text-lg text-white'>{"Don't"} have an account?</p>
@@ -66,4 +100,5 @@ const LoginPage = () => {
 		</div>
 	);
 };
+
 export default LoginPage;
