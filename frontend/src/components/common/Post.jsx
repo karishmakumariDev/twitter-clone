@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
 import LoadingSpinner from "./LoadingSpinner";
-//import { formatPostDate } from "../../utils/date";
+
 import { formatPostDate } from "../../utils/data";
 
 const Post = ({ post }) => {
@@ -17,6 +17,7 @@ const Post = ({ post }) => {
 	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
 	const postOwner = post.user;
+	console.log("postOwner:",postOwner);
 	const isLiked = post.likes.includes(authUser._id);
 
 	const isMyPost = authUser._id === post.user._id;
@@ -126,7 +127,7 @@ const Post = ({ post }) => {
 
 	return (
 		<>
-			<div className='flex items-start gap-2 border-gray-700 p-4 border-b'>
+			<div className='flex items-start gap-2 p-4 border-gray-700 border-b'>
 				<div className='avatar'>
 					<Link to={`/profile/${postOwner.username}`} className='rounded-full w-8 overflow-hidden'>
 						<img src={postOwner.profileImg || "/avatar-placeholder.png"} />
@@ -157,7 +158,7 @@ const Post = ({ post }) => {
 						{post.img && (
 							<img
 								src={post.img}
-								className='border-gray-700 border rounded-lg h-80 object-contain'
+								className='border border-gray-700 rounded-lg h-80 object-contain'
 								alt=''
 							/>
 						)}
@@ -174,8 +175,8 @@ const Post = ({ post }) => {
 								</span>
 							</div>
 							{/* We're using Modal Component from DaisyUI */}
-							<dialog id={`comments_modal${post._id}`} className='border-none modal outline-none'>
-								<div className='border-gray-600 border rounded modal-box'>
+							<dialog id={`comments_modal${post._id}`} className='border-none outline-none modal'>
+								<div className='border border-gray-600 rounded modal-box'>
 									<h3 className='mb-4 font-bold text-lg'>COMMENTS</h3>
 									<div className='flex flex-col gap-3 max-h-60 overflow-auto'>
 										{post.comments.length === 0 && (
@@ -205,11 +206,11 @@ const Post = ({ post }) => {
 										))}
 									</div>
 									<form
-										className='flex items-center gap-2 border-gray-600 mt-4 pt-2 border-t'
+										className='flex items-center gap-2 mt-4 pt-2 border-gray-600 border-t'
 										onSubmit={handlePostComment}
 									>
 										<textarea
-											className='border-gray-800 p-1 border rounded w-full text-md resize-none textarea focus:outline-none'
+											className='p-1 border border-gray-800 rounded focus:outline-none w-full text-md resize-none textarea'
 											placeholder='Add a comment...'
 											value={comment}
 											onChange={(e) => setComment(e.target.value)}

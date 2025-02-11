@@ -1,5 +1,3 @@
-//import React from 'react'
-
 import { CiImageOn } from "react-icons/ci";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import { useRef, useState } from "react";
@@ -7,18 +5,15 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-
 const CreatePost = () => {
 	const [text, setText] = useState("");
 	const [img, setImg] = useState(null);
-
 	const imgRef = useRef(null);
 
-    const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
 
-
-    const {
+	const {
 		mutate: createPost,
 		isPending,
 		isError,
@@ -42,6 +37,7 @@ const CreatePost = () => {
 				throw new Error(error);
 			}
 		},
+
 		onSuccess: () => {
 			setText("");
 			setImg(null);
@@ -50,15 +46,9 @@ const CreatePost = () => {
 		},
 	});
 
-
-	// const data = {
-	// 	profileImg: "/avatars/boy1.png",
-	// };
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		alert("Post created successfully");
-        createPost({ text, img });
+		createPost({ text, img });
 	};
 
 	const handleImgChange = (e) => {
@@ -73,7 +63,7 @@ const CreatePost = () => {
 	};
 
 	return (
-		<div className='flex items-start gap-4 border-gray-700 p-4 border-b'>
+		<div className='flex items-start gap-4 p-4 border-gray-700 border-b'>
 			<div className='avatar'>
 				<div className='rounded-full w-8'>
 					<img src={authUser.profileImg || "/avatar-placeholder.png"} />
@@ -81,7 +71,7 @@ const CreatePost = () => {
 			</div>
 			<form className='flex flex-col gap-2 w-full' onSubmit={handleSubmit}>
 				<textarea
-					className='border-gray-800 p-0 border-none w-full text-lg resize-none textarea focus:outline-none'
+					className='p-0 border-gray-800 border-none focus:outline-none w-full text-lg resize-none textarea'
 					placeholder='What is happening?!'
 					value={text}
 					onChange={(e) => setText(e.target.value)}
@@ -102,18 +92,17 @@ const CreatePost = () => {
 				<div className='flex justify-between py-2 border-t border-t-gray-700'>
 					<div className='flex items-center gap-1'>
 						<CiImageOn
-							className='w-6 h-6 cursor-pointer fill-primary'
+							className='fill-primary w-6 h-6 cursor-pointer'
 							onClick={() => imgRef.current.click()}
 						/>
-						<BsEmojiSmileFill className='w-5 h-5 cursor-pointer fill-primary' />
+						<BsEmojiSmileFill className='fill-primary w-5 h-5 cursor-pointer' />
 					</div>
-					<input type='file' accept="image/*" hidden ref={imgRef} onChange={handleImgChange} />
+					<input type='file' accept='image/*' hidden ref={imgRef} onChange={handleImgChange} />
 					<button className='px-4 rounded-full text-white btn btn-primary btn-sm'>
 						{isPending ? "Posting..." : "Post"}
 					</button>
 				</div>
 				{isError && <div className='text-red-500'>{error.message}</div>}
-
 			</form>
 		</div>
 	);

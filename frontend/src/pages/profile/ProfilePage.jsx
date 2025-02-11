@@ -1,16 +1,17 @@
-
-import { useRef,useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Posts from "../../components/common/Post";
-import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHederSkeleton";
+
+import Posts from "../../components/common/Posts";
+import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 
 import { POSTS } from "../../utils/db/dummy";
 
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
+import { useQuery } from "@tanstack/react-query";
 
 const ProfilePage = () => {
 	const [coverImg, setCoverImg] = useState(null);
@@ -20,20 +21,22 @@ const ProfilePage = () => {
 	const coverImgRef = useRef(null);
 	const profileImgRef = useRef(null);
 
+	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+
 	const isLoading = false;
 	const isMyProfile = true;
 
-	const user = {
-		_id: "1",
-		fullName: "John Doe",
-		username: "johndoe",
-		profileImg: "/avatars/boy2.png",
-		coverImg: "/cover.png",
-		bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		link: "https://youtube.com/@asaprogrammer_",
-		following: ["1", "2", "3"],
-		followers: ["1", "2", "3"],
-	};
+	// const user = {
+	// 	_id: "1",
+	// 	fullName: "John Doe",
+	// 	username: "johndoe",
+	// 	profileImg: "/avatars/boy2.png",
+	// 	coverImg: "/cover.png",
+	// 	bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+	// 	link: "https://youtube.com/@asaprogrammer_",
+	// 	following: ["1", "2", "3"],
+	// 	followers: ["1", "2", "3"],
+	// };
 
 	const handleImgChange = (e, state) => {
 		const file = e.target.files[0];
@@ -52,23 +55,23 @@ const ProfilePage = () => {
 			<div className='flex-[4_4_0] border-gray-700 border-r min-h-screen'>
 				{/* HEADER */}
 				{isLoading && <ProfileHeaderSkeleton />}
-				{!isLoading && !user && <p className='mt-4 text-center text-lg'>User not found</p>}
+				{!isLoading && !authUser && <p className='mt-4 text-lg text-center'>User not found</p>}
 				<div className='flex flex-col'>
-					{!isLoading && user && (
+					{!isLoading && authUser && (
 						<>
 							<div className='flex items-center gap-10 px-4 py-2'>
 								<Link to='/'>
 									<FaArrowLeft className='w-4 h-4' />
 								</Link>
 								<div className='flex flex-col'>
-									<p className='font-bold text-lg'>{user?.fullName}</p>
+									<p className='font-bold text-lg'>{authUser?.fullName}</p>
 									<span className='text-slate-500 text-sm'>{POSTS?.length} posts</span>
 								</div>
 							</div>
 							{/* COVER IMG */}
 							<div className='group/cover relative'>
 								<img
-									src={coverImg || user?.coverImg || "/cover.png"}
+									src={coverImg || authUser?.coverImg || "/cover.png"}
 									className='w-full h-52 object-cover'
 									alt='cover image'
 								/>
@@ -96,7 +99,7 @@ const ProfilePage = () => {
 								{/* USER AVATAR */}
 								<div className='-bottom-16 left-4 absolute avatar'>
 									<div className='group/avatar relative rounded-full w-32'>
-										<img src={profileImg || user?.profileImg || "/avatar-placeholder.png"} />
+										<img src={profileImg || authUser?.profileImg || "/avatar-placeholder.png"} />
 										<div className='top-5 right-3 absolute bg-primary opacity-0 group-hover/avatar:opacity-100 p-1 rounded-full cursor-pointer'>
 											{isMyProfile && (
 												<MdEdit
@@ -112,7 +115,7 @@ const ProfilePage = () => {
 								{isMyProfile && <EditProfileModal />}
 								{!isMyProfile && (
 									<button
-										className='rounded-full btn btn-outline btn-sm'
+										className='rounded-full btn-outline btn btn-sm'
 										onClick={() => alert("Followed successfully")}
 									>
 										Follow
@@ -130,13 +133,13 @@ const ProfilePage = () => {
 
 							<div className='flex flex-col gap-4 mt-14 px-4'>
 								<div className='flex flex-col'>
-									<span className='font-bold text-lg'>{user?.fullName}</span>
-									<span className='text-slate-500 text-sm'>@{user?.username}</span>
-									<span className='my-1 text-sm'>{user?.bio}</span>
+									<span className='font-bold text-lg'>{authUser?.fullName}</span>
+									<span className='text-slate-500 text-sm'>@{authUser?.username}</span>
+									<span className='my-1 text-sm'>{authUser?.bio}</span>
 								</div>
 
 								<div className='flex flex-wrap gap-2'>
-									{user?.link && (
+									{authUser?.link && (
 										<div className='flex items-center gap-1'>
 											<>
 												<FaLink className='w-3 h-3 text-slate-500' />
@@ -158,16 +161,16 @@ const ProfilePage = () => {
 								</div>
 								<div className='flex gap-2'>
 									<div className='flex items-center gap-1'>
-										<span className='font-bold text-xs'>{user?.following.length}</span>
+										<span className='font-bold text-xs'>{authUser?.following.length}</span>
 										<span className='text-slate-500 text-xs'>Following</span>
 									</div>
 									<div className='flex items-center gap-1'>
-										<span className='font-bold text-xs'>{user?.followers.length}</span>
+										<span className='font-bold text-xs'>{authUser?.followers.length}</span>
 										<span className='text-slate-500 text-xs'>Followers</span>
 									</div>
 								</div>
 							</div>
-							<div className='flex border-gray-700 mt-4 border-b w-full'>
+							<div className='flex mt-4 border-gray-700 border-b w-full'>
 								<div
 									className='relative flex flex-1 justify-center hover:bg-secondary p-3 transition duration-300 cursor-pointer'
 									onClick={() => setFeedType("posts")}

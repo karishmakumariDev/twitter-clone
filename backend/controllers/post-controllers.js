@@ -3,43 +3,46 @@ import cloudinary from "cloudinary"
 import Post from "../models/post.model.js";
 import Notification from "../models/notification.model.js";
 
-export const createPost = async (req , res) => {
-    console.log(createPost);
+export const createPost = async (req, res) => {
+    console.log("createPost function called"); 
 
-    try{
+    try {
+        const { text } = req.body;
+        let img = req.body.img; 
 
-       const { text }  = req.body;
-       const { img } = req.body;
+        const userId = req.user._id.toString();
+        console.log("userId:", userId);
 
-       const userId = req.user._id.toString();
-       console.log("userId",userId);
-       const user = await User.findById(userId);
-       console.log("user",user);
+        const user = await User.findById(userId);
+        console.log("user:", user);
 
-       if(!user) return res.status(400).json({message: "user not found"});
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
 
-       if(!text && ! img) {
-        return res.status(400).json({message: "Post must have text or image"});
-       }
+        if (!text && !img) {
+            return res.status(400).json({ message: "Post must have text or image" });
+        }
 
-       if(img) {
-        const uploadedResponse = await cloudinary.uploader.upload(img);
-        img = uploadedResponse.secure_url;
-       }
+        if (img) {
+            const uploadedResponse = await cloudinary.uploader.upload(img);
+            img = uploadedResponse.secure_url; 
+        }
 
-       const newPost = new Post({
-        user:userId,
-        text,
-        img
-       })
+        const newPost = new Post({
+            user: userId,
+            text,
+            img
+        });
 
-       await newPost.save();
-       res.status(201).json(newPost);
-    }catch(error){
-     res.status(500).json({error: "Internal Server Error"});
-     console.log("error in createPost controller:",error);
+        await newPost.save();
+        res.status(201).json(newPost);
+    } catch (error) {
+        console.error("Error in createPost controller:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-}
+};
+
     
 export const deletePost = async (req, res) => {
     console.log("deletepost");
