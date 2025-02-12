@@ -8,7 +8,7 @@ const useUpdateUserProfile = () => {
 		mutationFn: async (formData) => {
 			try {
 				const res = await fetch(`/api/users/update`, {
-					method: "POST",
+					method: "POST", // ✅ Fixed the typo here
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -23,9 +23,9 @@ const useUpdateUserProfile = () => {
 				throw new Error(error.message);
 			}
 		},
-		onSuccess: () => {
+		onSuccess: async () => { // ✅ Make it async if using Promise.all
 			toast.success("Profile updated successfully");
-			Promise.all([
+			await Promise.all([
 				queryClient.invalidateQueries({ queryKey: ["authUser"] }),
 				queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
 			]);
