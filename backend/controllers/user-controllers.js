@@ -159,3 +159,20 @@ export const updateUserProfile = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getFollowingUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).populate("following", "username link");
+        
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json(user.following);  
+    } catch (error) {
+        console.error("Error fetching following list:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+
