@@ -175,4 +175,20 @@ export const getFollowingUser = async (req, res) => {
     }
 };
 
+export const getFollowerUser = async (req, res) => {
+ console.log("getFollowerUser started");
+ try{
+     const user = await User.findById(req.params.id).populate("followers", "username link")
+     if(!user) {
+         return res.status(404).json({error: "user not found" });
+     }
+
+     res.status(200).json(user.followers)
+ }catch (error) { 
+    console.error("Error fetching following list:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+ }
+
+}
+
 

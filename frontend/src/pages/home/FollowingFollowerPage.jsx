@@ -4,6 +4,10 @@ import { useState } from "react";
 const FollowingFollowerPage = () => {
   const [feedType, setFeedType] = useState("following");
   return (
+
+
+    
+
     <div className="flex-[4_4_0] border-gray-700 border-r min-h-screen text-white">
       {/* Header */}
       <div className="top-0 sticky flex items-center gap-3 bg-black p-4 border-gray-700 border-b">
