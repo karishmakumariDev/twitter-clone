@@ -22,6 +22,8 @@ const ProfilePage = () => {
 	const [profileImg, setProfileImg] = useState(null);
 	const [feedType, setFeedType] = useState("posts");
 
+	const [showfollowing, setshowfollowing] = useState(false);
+
 	const coverImgRef = useRef(null);
 	const profileImgRef = useRef(null);
 
@@ -68,6 +70,12 @@ const ProfilePage = () => {
 			reader.readAsDataURL(file);
 		}
 	};
+
+   const handleFollowingClick = () => {
+	console.log("showfollowing",showfollowing);
+	setshowfollowing(!showfollowing);
+	console.log('User following data:', user?.following);
+   }
 
 	useEffect(() => {
 		refetch();
@@ -193,8 +201,24 @@ const ProfilePage = () => {
 								</div>
 								<div className='flex gap-2'>
 									<div className='flex items-center gap-1'>
-										<span className='font-bold text-xs'>{user?.following.length}</span>
-										<span className='text-slate-500 text-xs'>Following</span>
+									<span className='font-bold text-xs'>{user?.following.length}</span>
+                                       <span
+                                           className='text-slate-500 text-xs cursor-pointer'
+                                           onClick={handleFollowingClick}
+                                       >
+                                     Following
+                                    </span> 
+									{showfollowing && (
+                                        <div className="mt-2">
+                                            <ul className="pl-5 list-disc">
+			
+                                              {user?.following?.map((followingUser, index) => (
+												
+                                                 <li key={index}>{followingUser.authUser.username}</li>
+                                             ))}
+                                           </ul>
+                                        </div>
+                                    )}
 									</div>
 									<div className='flex items-center gap-1'>
 										<span className='font-bold text-xs'>{user?.followers.length}</span>

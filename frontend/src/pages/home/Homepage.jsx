@@ -1,7 +1,5 @@
 
 import { useState } from "react";
-
-//import Posts from "../../components/common/Posts";
 import CreatePost from "./CreatePost";
 import Posts from "../../components/common/Posts";
 
@@ -10,7 +8,7 @@ const HomePage = () => {
 
 	return (
 		<>
-			<div className='flex-[4_4_0] border-gray-700 mr-auto border-r min-h-screen'>
+			<div className='flex-[4_4_0] mr-auto border-gray-700 border-r min-h-screen'>
 				{/* Header */}
 				<div className='flex border-gray-700 border-b w-full'>
 					<div
@@ -34,8 +32,6 @@ const HomePage = () => {
 						)}
 					</div>
 				</div>
-
-				 CREATE POST INPUT
 				<CreatePost />
 
 				{/* POSTS */}
