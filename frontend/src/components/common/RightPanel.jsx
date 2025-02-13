@@ -1,37 +1,35 @@
 import { Link } from "react-router-dom";
 import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
-//import { USERS_FOR_RIGHT_PANEL } from "../../utils/db/dummy";
 import { useQuery } from "@tanstack/react-query";
-
-//import LoadingSpinner from "./LoadingSpinner";
+import useFollow from "../../hooks/useFollow";
+import LoadingSpinner from "./LoadingSpinner";
 
 const RightPanel = () => {
+
+  const { follow, isPending } = useFollow();
+
   const { data: suggestedUsers, isLoading } = useQuery({
     queryKey: ["suggestedUsers"],
     queryFn: async () => {
-      try {
-        const res = await fetch("/api/users/suggested");
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.message || "Something went wrong!");
-        }
-        return data;
-      } catch (error) {
-        throw new Error(error.message);
+      const res = await fetch("/api/users/suggested");
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong!");
       }
+      return data;
     },
   });
 
   if (suggestedUsers?.length === 0) return <div className="w-0 md:w-64"></div>;
 
- // const { follow, isPending } = useFollow();
+  
+  
 
   return (
     <div className="hidden lg:block mx-2 my-4">
       <div className="top-2 sticky bg-[#16181C] p-4 rounded-md">
         <p className="font-bold">Who to follow</p>
         <div className="flex flex-col gap-4">
-          {/* item */}
           {isLoading && (
             <>
               <RightPanelSkeleton />
@@ -66,12 +64,11 @@ const RightPanel = () => {
                   <button
                     className="bg-white hover:bg-white hover:opacity-90 rounded-full text-black btn btn-sm"
                     onClick={(e) => {
-                      e.preventDefault(); // Now inside a block
-                      //follow(user?._id); // Using optional chaining to prevent errors
+                      e.preventDefault(); 
+                      follow(user?._id); 
                     }}
                   >
-                    follow
-                    {/* {isPending ? < LoadingSpinner size="sm"/> : "follow"} */}
+                    {isPending ? <LoadingSpinner size="sm" /> : "Follow"}
                   </button>
                 </div>
               </Link>
@@ -81,4 +78,5 @@ const RightPanel = () => {
     </div>
   );
 };
+
 export default RightPanel;

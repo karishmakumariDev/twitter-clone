@@ -116,7 +116,10 @@ export const getMe = async (req, res) => {
     console.log("getMe");
 	try {
         console.log("User in getMe:", req.user);
-		const user = await User.findById(req.user._id).select("-password");
+		const user = await User.findById(req.user._id)
+  .select("-password")
+  .populate('following');
+
 		res.status(200).json(user);
 	} catch (error) {
 		console.log("Error in getMe controller", error.message);

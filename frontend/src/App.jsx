@@ -13,6 +13,8 @@ import RightPanel from "./components/common/RightPanel";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import FollowingFollowerPage from "./pages/home/FollowingFollowerPage";
+
 
 function App() {
 	const { data: authUser, isLoading } = useQuery({
@@ -49,6 +51,7 @@ function App() {
 			{authUser && <Sidebar />}
 			<Routes>
 				<Route path='/' element={authUser ? <HomePage /> : <Navigate to='/login' />} />
+				<Route path='/following' element={authUser ? <FollowingFollowerPage /> : <Navigate to='/' />} />
 				<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
 				<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
 				<Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/' />} />
