@@ -51,7 +51,7 @@ function App() {
 			{authUser && <Sidebar />}
 			<Routes>
 				<Route path='/' element={authUser ? <HomePage /> : <Navigate to='/login' />} />
-				<Route path='/following' element={authUser ? <FollowingFollowerPage /> : <Navigate to='/' />} />
+				<Route path='/profile/:username/:followingFollwerState' element={authUser ? <FollowingFollowerPage /> : <Navigate to='/' />} />
 				<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
 				<Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
 				<Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/' />} />
